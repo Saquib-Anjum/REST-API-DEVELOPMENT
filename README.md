@@ -46,12 +46,15 @@ cd your-repo-name
 # Install dependencies
 npm install
 ```
---
+-.env
+```
 PORT=3000
 MONGO_URI=mongodb://localhost:27017/your-database-name
 JWT_SECRET=your-jwt-secret
 DEBUG_MODE=true
-
+```
+-Project Structure
+```
 📁 project-root
 ├── 📁 controllers
 ├── 📁 models
@@ -60,4 +63,4 @@ DEBUG_MODE=true
 ├── 📁 config
 ├── server.js
 └── package.json
-
+```

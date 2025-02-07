@@ -1,7 +1,7 @@
 class customErrorHandler extends Error {
     constructor(status,msg){
 this.status = status;
-this.message = msg;
+super(msg);
     }
 
     static alreadyExist(message){

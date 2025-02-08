@@ -4,7 +4,7 @@ import JwtService from '../../services/JwtService.js';
 
 import { User } from '../../models/index.js';
 import bcrypt from 'bcrypt';
-
+const REFRESH_SECRET=process.REFRESH_SECRET;
 const registerController = {
     async register(req, res, next) {
         // Validation using Joi
@@ -41,12 +41,18 @@ const registerController = {
         });
 
         let access_token;
+        let refresh_token;
         try {
             const result = await newUser.save();
             //console.log(result);
 
             // Generate JWT token
             access_token = JwtService.sign({ _id: result._id, role: result.role });
+            //refreh token 
+            refresh_token=JwtService.sign({_id: result._id, role: result.role},'1y',REFRESH_SECRET)
+            //adding this refresh token into DB
+
+            
            // console.log(access_token)
         } catch (err) {
             return next(err);

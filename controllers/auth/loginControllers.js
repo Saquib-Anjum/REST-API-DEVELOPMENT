@@ -2,8 +2,8 @@ import Joi from "joi";
 import customErorHandler from "../../services/customErrorHandler.js";
 import JwtService from '../../services/JwtService.js';
 import bcrypt from 'bcrypt';
-import {User} from '../../models/index.js'
-
+import {User,RefreshToken} from '../../models/index.js'
+const REFRESH_SECRET= process.env.REFRESH_SECRET;
 const loginController = {
   async login(req, res, next) {
     //validation
@@ -31,11 +31,14 @@ const loginController = {
       //token generation here;
       const access_token = JwtService.sign({ _id: user._id, role: user.role });
       console.log(access_token)
-      
-
+      //refresh token 
+      const refresh_token=JwtService.sign({_id: result._id, role: result.role},'1y',REFRESH_SECRET)
+      //adding this refresh token into DB
+        await RefreshToken.create({token:refresh_token})
       //sending to the clinet
       res.json({
-        access_token:access_token 
+        access_token:access_token,
+        refresh_token:refresh_token 
      })
 
 

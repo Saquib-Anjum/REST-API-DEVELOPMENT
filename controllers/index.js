@@ -5,3 +5,4 @@ export { default as loginController } from './auth/loginControllers.js';
 
 export { default as userController } from './auth/userControllers.js';
 
+export { default as refreshController} from './auth/refreshController.js'

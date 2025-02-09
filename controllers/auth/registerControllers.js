@@ -2,7 +2,7 @@ import Joi from 'joi';
 import customErorHandler from '../../services/customErrorHandler.js';
 import JwtService from '../../services/JwtService.js';
 
-import { User } from '../../models/index.js';
+import { User ,RefreshToken} from '../../models/index.js';
 import bcrypt from 'bcrypt';
 const REFRESH_SECRET=process.REFRESH_SECRET;
 const registerController = {
@@ -46,13 +46,13 @@ const registerController = {
             const result = await newUser.save();
             //console.log(result);
 
-            // Generate JWT token
+            // Generate JWT token:access token 
             access_token = JwtService.sign({ _id: result._id, role: result.role });
             //refreh token 
             refresh_token=JwtService.sign({_id: result._id, role: result.role},'1y',REFRESH_SECRET)
             //adding this refresh token into DB
+            await RefreshToken.create({token:refresh_token})
 
-            
            // console.log(access_token)
         } catch (err) {
             return next(err);
@@ -60,7 +60,8 @@ const registerController = {
 
         // Send the access token in the response
         res.json({
-            access_token: access_token
+            access_token: access_token,
+            refresh_token:refresh_token
         });
     }
 };
